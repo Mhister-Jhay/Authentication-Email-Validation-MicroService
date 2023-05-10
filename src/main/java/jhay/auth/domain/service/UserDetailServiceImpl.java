@@ -1,10 +1,9 @@
 package jhay.auth.domain.service;
 
-import jhay.auth.domain.exception.UserNotFoundException;
+import jhay.auth.common.exception.UserNotFoundException;
 import jhay.auth.domain.model.User;
-import jhay.auth.domain.repository.UserRepository;
+import jhay.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

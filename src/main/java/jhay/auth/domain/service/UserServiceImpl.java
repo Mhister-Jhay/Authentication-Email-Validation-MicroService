@@ -1,17 +1,18 @@
 package jhay.auth.domain.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jhay.auth.application.registration.model.RegistrationRequest;
-import jhay.auth.application.registration.model.RegistrationResponse;
-import jhay.auth.domain.event.RegistrationCompleteEvent;
-import jhay.auth.domain.exception.UserAlreadyExistException;
-import jhay.auth.domain.exception.UserNotFoundException;
+import jakarta.transaction.Transactional;
+import jhay.auth.application.model.RegistrationRequest;
+import jhay.auth.application.model.RegistrationResponse;
+import jhay.auth.common.event.registrationEvent.RegistrationCompleteEvent;
+import jhay.auth.common.exception.UserAlreadyExistException;
+import jhay.auth.common.exception.UserNotFoundException;
 import jhay.auth.domain.model.Role;
 import jhay.auth.domain.model.User;
-import jhay.auth.domain.repository.UserRepository;
-import jhay.auth.domain.security.jwt.JwtAuthProvider;
-import jhay.auth.domain.security.jwt.JwtToken;
-import jhay.auth.domain.security.jwt.JwtTokenRepository;
+import jhay.auth.repository.UserRepository;
+import jhay.auth.common.security.jwt.JwtAuthProvider;
+import jhay.auth.common.security.jwt.JwtToken;
+import jhay.auth.common.security.jwt.JwtTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -52,6 +53,13 @@ public class UserServiceImpl implements UserService{
         jwtToken.setUser(theUser);
         JwtToken theToken = jwtTokenRepository.save(jwtToken);
         return new RegistrationResponse(theToken);
+    }
+    @Transactional
+    @Override
+    public String resetPassword(String email, String password){
+        User user = getUserByEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        return "Password Changed, Proceed to Login";
     }
     @Override
     public User getUserByEmail(String email){

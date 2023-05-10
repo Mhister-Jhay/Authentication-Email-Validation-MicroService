@@ -1,12 +1,16 @@
 package jhay.auth.domain.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jhay.auth.application.registration.model.RegistrationRequest;
-import jhay.auth.application.registration.model.RegistrationResponse;
+import jakarta.transaction.Transactional;
+import jhay.auth.application.model.RegistrationRequest;
+import jhay.auth.application.model.RegistrationResponse;
 import jhay.auth.domain.model.User;
 
 public interface UserService {
     RegistrationResponse registerUser(RegistrationRequest registerRequest, HttpServletRequest request);
+
+    @Transactional
+    String resetPassword(String email, String password);
 
     User getUserByEmail(String email);
 
