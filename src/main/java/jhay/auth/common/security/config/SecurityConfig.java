@@ -2,7 +2,7 @@ package jhay.auth.common.security.config;
 
 import jhay.auth.common.security.jwt.JwtAuthenticationEntryPoint;
 import jhay.auth.common.security.jwt.JwtAuthenticationFilter;
-import jhay.auth.domain.service.UserDetailServiceImpl;
+import jhay.auth.domain.service.user.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/register/**","/authenticate")
+                .requestMatchers("/register/**","/login/**","/authenticate")
                 .permitAll()
                 .anyRequest()
                 .hasAnyAuthority("ADMIN","USER")

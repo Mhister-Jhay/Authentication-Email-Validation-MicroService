@@ -1,8 +1,8 @@
-package jhay.auth.common.event.passwordEvent;
+package jhay.auth.common.event;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import jhay.auth.common.security.token.TokenValidationServiceImpl;
+import jhay.auth.domain.service.token.TokenValidationServiceImpl;
 import jhay.auth.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
@@ -28,7 +28,7 @@ public class ForgotPasswordEventListener implements
         // 3. Save the token in the database
         tokenValidationService.saveVerificationToken(passwordToken,user);
         // 4. Build the verification link for the user
-        String url = event.getApplicationUrl()+"/reset-password?token="+passwordToken;
+        String url = event.getApplicationUrl()+"/verify-reset-password?token="+passwordToken;
         // 5. Actually send the mail
         try {
             sendVerificationEmail(url,user);

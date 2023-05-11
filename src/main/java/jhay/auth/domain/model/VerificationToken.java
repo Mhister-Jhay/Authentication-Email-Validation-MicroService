@@ -1,7 +1,6 @@
-package jhay.auth.common.security.token;
+package jhay.auth.domain.model;
 
 import jakarta.persistence.*;
-import jhay.auth.domain.model.User;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -37,7 +36,7 @@ public class VerificationToken {
     private Date getExpirationDate(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(new Date().getTime());
-        calendar.add(Calendar.MINUTE,1);
+        calendar.add(Calendar.MINUTE,5);
         return new Date(calendar.getTime().getTime());
     }
 

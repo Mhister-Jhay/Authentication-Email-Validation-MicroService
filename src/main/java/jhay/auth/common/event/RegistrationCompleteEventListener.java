@@ -1,9 +1,9 @@
-package jhay.auth.common.event.registrationEvent;
+package jhay.auth.common.event;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jhay.auth.domain.model.User;
-import jhay.auth.common.security.token.TokenValidationServiceImpl;
+import jhay.auth.domain.service.token.TokenValidationServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,11 +15,11 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class RegistrationCompleteEventListener implements
-        ApplicationListener<RegistrationCompleteEvent> {
+        ApplicationListener<RegistrationEvent> {
     private final TokenValidationServiceImpl tokenValidationService;
     private final JavaMailSender mailSender;
     @Override
-    public void onApplicationEvent(RegistrationCompleteEvent event) {
+    public void onApplicationEvent(RegistrationEvent event) {
         // 1. Get the newly registered user
         User user = event.getUser();
         //2. Develop a token for the user
@@ -27,7 +27,7 @@ public class RegistrationCompleteEventListener implements
         // 3. Save the token in the database
         tokenValidationService.saveVerificationToken(verifyToken,user);
         // 4. Build the verification link for the user
-        String url = event.getApplicationUrl()+"/register/verify?token="+verifyToken;
+        String url = event.getApplicationUrl()+"/register/verify-email?token="+verifyToken;
         // 5. Actually send the mail
         try {
             sendVerificationEmail(url,user);

@@ -1,4 +1,4 @@
-package jhay.auth.common.event.passwordEvent;
+package jhay.auth.common.event;
 
 import jhay.auth.domain.model.User;
 import lombok.Getter;

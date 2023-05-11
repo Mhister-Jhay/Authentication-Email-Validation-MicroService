@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jhay.auth.domain.model.User;
-import jhay.auth.domain.service.UserDetailServiceImpl;
+import jhay.auth.domain.service.user.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

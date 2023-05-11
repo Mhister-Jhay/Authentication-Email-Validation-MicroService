@@ -6,7 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jhay.auth.domain.model.User;
-import jhay.auth.domain.service.UserDetailServiceImpl;
+import jhay.auth.domain.service.user.UserDetailServiceImpl;
 import jhay.auth.common.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

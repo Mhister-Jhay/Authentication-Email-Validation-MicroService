@@ -1,4 +1,4 @@
-package jhay.auth.domain.service;
+package jhay.auth.domain.service.user;
 
 import jhay.auth.common.exception.UserNotFoundException;
 import jhay.auth.domain.model.User;

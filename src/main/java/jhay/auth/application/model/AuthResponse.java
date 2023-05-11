@@ -10,12 +10,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RegistrationResponse {
+public class AuthResponse {
     private String accessToken;
     private String assignedTo;
     private Date validTill;
 
-    public RegistrationResponse(JwtToken jwtToken){
+    public AuthResponse(JwtToken jwtToken){
         this.accessToken = jwtToken.getAccessToken();
         this.assignedTo = jwtToken.getUser().getEmail();
         this.validTill = jwtToken.getExpiresAt();

@@ -1,12 +1,14 @@
-package jhay.auth.common.security.token;
+package jhay.auth.domain.service.token;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jhay.auth.common.event.passwordEvent.ForgotPasswordEvent;
-import jhay.auth.common.event.registrationEvent.RegistrationCompleteEvent;
+import jhay.auth.common.event.ForgotPasswordEvent;
 import jhay.auth.common.exception.TokenNotFoundException;
 import jhay.auth.common.exception.UserAlreadyVerifiedException;
+import jhay.auth.common.utils.EmailUtils;
 import jhay.auth.domain.model.User;
-import jhay.auth.domain.service.UserServiceImpl;
+import jhay.auth.domain.model.VerificationToken;
+import jhay.auth.domain.service.user.UserServiceImpl;
+import jhay.auth.repository.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,7 @@ public class TokenValidationServiceImpl implements TokenValidationService{
         }
         if(verificationToken.getExpirationTime().before(new Date())){
             return "Please click on the link to get a new verification mail : "+
-                    userService.applicationUrl(request)+"/register/request-new-token?email="+user.getEmail();
+                    EmailUtils.applicationUrl(request)+"/register/request-new-verification-token?email="+user.getEmail();
         }
         user.setIsEnabled(true);
         if(user.getIsEnabled()){
@@ -44,23 +46,29 @@ public class TokenValidationServiceImpl implements TokenValidationService{
     }
     @Transactional
     @Override
-    public String requestNewToken(String email, HttpServletRequest request){
+    public String requestNewVerificationToken(String email, HttpServletRequest request){
         User user = userService.getUserByEmail(email);
         if(user.getIsEnabled()){
             throw new UserAlreadyVerifiedException(email);
         }
         VerificationToken verificationToken =
                 tokenRepository.findByUser(user);
-        publisher.publishEvent(new RegistrationCompleteEvent(user,userService.applicationUrl(request)));
+        publisher.publishEvent(new ForgotPasswordEvent(user,EmailUtils.applicationUrl(request)));
         tokenRepository.delete(verificationToken);
         return "Please check your mail for new Verification Link";
     }
-
+    @Transactional
     @Override
-    public String forgotPassword(String email, HttpServletRequest request){
+    public String requestForgotPasswordToken(String email, HttpServletRequest request) {
         User user = userService.getUserByEmail(email);
-        publisher.publishEvent(new ForgotPasswordEvent(user, userService.applicationUrl(request)));
-        return "Please Check your mail for new Password reset Link";
+        if (user.getIsEnabled()) {
+            throw new UserAlreadyVerifiedException(email);
+        }
+        VerificationToken verificationToken =
+                tokenRepository.findByUser(user);
+        publisher.publishEvent(new ForgotPasswordEvent(user, EmailUtils.applicationUrl(request)));
+        tokenRepository.delete(verificationToken);
+        return "Please check your mail for new Verification Link";
     }
 
     @Override

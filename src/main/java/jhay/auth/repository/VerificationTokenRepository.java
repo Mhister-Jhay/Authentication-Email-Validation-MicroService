@@ -1,6 +1,7 @@
-package jhay.auth.common.security.token;
+package jhay.auth.repository;
 
 import jhay.auth.domain.model.User;
+import jhay.auth.domain.model.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
