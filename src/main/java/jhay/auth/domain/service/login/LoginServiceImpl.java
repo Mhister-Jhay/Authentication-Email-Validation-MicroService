@@ -5,6 +5,8 @@ import jakarta.transaction.Transactional;
 import jhay.auth.application.model.AuthResponse;
 import jhay.auth.application.model.LoginRequest;
 import jhay.auth.common.event.ForgotPasswordEvent;
+import jhay.auth.common.exception.BadCredentialsException;
+import jhay.auth.common.exception.UserNotVerifiedException;
 import jhay.auth.common.security.jwt.JwtToken;
 import jhay.auth.common.security.jwt.JwtTokenRepository;
 import jhay.auth.common.utils.EmailUtils;
@@ -37,12 +39,11 @@ public class LoginServiceImpl implements LoginService {
     public AuthResponse loginUser(LoginRequest loginRequest){
         User user = userService.getUserByEmail(loginRequest.getEmail());
         if(!user.getIsEnabled()){
-            throw new IllegalStateException("Account Disabled, Please verify your account");
+            throw new UserNotVerifiedException(user.getEmail());
         }
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
-                        loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        if(!user.getPassword().equals(passwordEncoder.encode(loginRequest.getPassword()))){
+            throw new BadCredentialsException("Wrong password, Check enter your correct password");
+        }
         JwtToken token = tokenRepository.findByUser(user);
         return AuthResponse.builder()
                 .accessToken(token.getAccessToken())
