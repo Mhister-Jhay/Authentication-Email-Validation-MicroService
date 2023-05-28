@@ -66,5 +66,5 @@ jobs:
 
       - name: Deploy to Elastic Beanstalk
         run: |
-          aws elasticbeanstalk create-application-version --application-name Authentication-Microservice --version-label v2
+          aws elasticbeanstalk create-application-version --application-name Authentication-Microservice --version-label v1
           aws elasticbeanstalk update-environment --environment-name Authentication-Microservice-env --version-label v1
