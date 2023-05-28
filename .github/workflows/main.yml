@@ -58,7 +58,7 @@ jobs:
 
       - name: Upload JAR file to S3
         run: |
-         aws s3 cp ${{ github.workspace }}/target/*.jar s3://authentication-service-01/
+         aws s3 cp ${{ github.workspace }}/target/authentication.jar s3://authentication-service-01/
 
       - name: Create Application Version
         run: |
