@@ -56,13 +56,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
 
+      - name: Upload JAR file to S3
+        run: |
+         aws s3 cp ${{ github.workspace }}/target/*.jar s3://authentication-service-01/
+
       - name: Create Application Version
         run: |
           aws elasticbeanstalk create-application-version \
             --application-name Authentication-Microservice \
             --version-label ${{ github.sha }} \
-            --source-bundle S3Bucket=elasticbeanstalk,S3Key=${{ github.workspace }}/target/*.jar
-    
+            --source-bundle S3Bucket=authentication-service-01,S3Key=target/authentication.jar
 
       - name: Create Elastic Beanstalk Environment
         run: |
