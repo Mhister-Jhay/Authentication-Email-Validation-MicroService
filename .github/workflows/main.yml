@@ -47,5 +47,5 @@ jobs:
           context: .
           dockerfile: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/Authentication-Email-Validation-Microservice:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/authentication-email-validation-microservice:latest
 
