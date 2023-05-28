@@ -49,3 +49,22 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/authentication-email-validation-microservice:latest
 
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push Docker image to Amazon ECR
+        run: |
+          docker build -t 360857296248.dkr.ecr.eu-north-1.amazonaws.com/authentication-email-validation-service:latest .
+          docker push 360857296248.dkr.ecr.eu-north-1.amazonaws.com/authentication-email-validation-service:latest
+
+      - name: Deploy to Elastic Beanstalk
+        run: |
+          aws elasticbeanstalk create-application-version --application-name Authentication-Microservice --version-label v1 --source-bundle "AutoCreateArtifact=true,Region=eu-north-1"
+          aws elasticbeanstalk update-environment --environment-name Authentication-Microservice-env --version-label v1
