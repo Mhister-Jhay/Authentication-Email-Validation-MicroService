@@ -66,6 +66,6 @@ jobs:
 
       - name: Update Environment Configuration
         run: |
-         aws elasticbeanstalk update-environment \
-          --environment-name Authentication-Microservice-env-1 \
-          --option-settings Namespace=aws:elasticbeanstalk:environment,OptionName=EnvironmentVariables,Value="IMAGE_URI=360857296248.dkr.ecr.eu-north-1.amazonaws.com/authentication-email-validation-service:latest"
+          aws elasticbeanstalk update-environment \
+            --environment-name Authentication-Microservice-env-1 \
+            --option-settings Namespace=aws:elasticbeanstalk:application:environment,OptionName=IMAGE_URI,Value="360857296248.dkr.ecr.eu-north-1.amazonaws.com/authentication-email-validation-service:latest"
