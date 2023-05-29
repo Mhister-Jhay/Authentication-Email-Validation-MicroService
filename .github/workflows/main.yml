@@ -78,7 +78,9 @@ jobs:
         with:
           push: true
           tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_80213be1ea454926990c34c388a8b82e }}/mhisterjhay/authentication-email-validation-microservice:${{ github.sha }}
+          context: .
           file: ./Dockerfile
+
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
