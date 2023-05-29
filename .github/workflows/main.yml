@@ -77,7 +77,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_80213be1ea454926990c34c388a8b82e }}/mhisterjhay/authentication-email-validation-microservice:${{ github.sha }}
+          tags: index.docker.io/mhisterjhay/authentication-email-validation-microservice:${{ github.sha }}
           context: .
           file: ./Dockerfile
 
@@ -89,5 +89,5 @@ jobs:
           app-name: 'jhay-auth-docker'
           slot-name: 'production'
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_3df6f7f11471446cb24ee1880a8f228c }}
-          images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_80213be1ea454926990c34c388a8b82e }}/mhisterjhay/authentication-email-validation-microservice:${{ github.sha }}'
+          images: 'index.docker.io/mhisterjhay/authentication-email-validation-microservice:${{ github.sha }}'
 
