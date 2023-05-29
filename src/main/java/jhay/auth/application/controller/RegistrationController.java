@@ -24,6 +24,10 @@ public class RegistrationController {
                                                         HttpServletRequest request){
         return new ResponseEntity<>(registrationService.registerUser(registerRequest,request), HttpStatus.CREATED);
     }
+    @GetMapping("/hello")
+    public String get(){
+        return "Hello, from azure";
+    }
     @GetMapping("/verify-email")
     public ResponseEntity<String> verifyUserEmail(@RequestParam("token") String token,
                                                   HttpServletRequest request){

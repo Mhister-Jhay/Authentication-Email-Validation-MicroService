@@ -5,6 +5,11 @@ on:
     branches:
       - main
 
+env:
+  ASC_PACKAGE_PATH: ${{ github.workspace }}
+  JAVA_VERSION: 17
+  AZURE_SUBSCRIPTION: 1f04183e-06ad-4de3-806d-3bdf8a517766
+
 jobs:
   build-deploy:
     name: Build and Deploy Authentication Application
@@ -17,7 +22,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'corretto'
-          java-version: 17
+          java-version: ${{ env.JAVA_VERSION }}
 
       - name: Unit Tests
         run: mvn -B test --file pom.xml
@@ -49,28 +54,17 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/authentication-email-validation-microservice:latest
 
-      - name: Configure AWS
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
-
-      - name: Upload JAR file to S3
-        run: |
-         aws s3 cp ${{ github.workspace }}/target/authentication.jar s3://authentication-service-01/
-
-      - name: Create Application Version
-        run: |
-          aws elasticbeanstalk create-application-version \
-            --application-name Authentication-Microservice \
-            --version-label ${{ github.sha }} \
-            --source-bundle S3Bucket=authentication-service-01,S3Key=target/authentication.jar
-
-      - name: Create Elastic Beanstalk Environment
-        run: |
-          aws elasticbeanstalk create-environment \
-          --application-name Authentication-Microservice \
-          --environment-name Authentication-Microservice-env \
-          --solution-stack-name "64bit Amazon Linux 2 v3.5.7 running Java 17" \
-          --version-label ${{ github.sha }}
+#      - name: Login via Azure CLI
+#        uses: azure/login@v1
+#        with:
+#          creds: ${{ secrets.AZURE_CREDENTIALS }}
+#
+#      - name: Deploy to Production with artifact
+#        uses: azure/spring-cloud-deploy@v1
+#        with:
+#          azure-subscription: ${{ env.AZURE_SUBSCRIPTION }}
+#          action: Deploy
+#          service-name: authentication-service
+#          app-name: authentication-microservice
+#          use-staging-deployment: false
+#          package: ${{ env.ASC_PACKAGE_PATH }}/**/*.jar
